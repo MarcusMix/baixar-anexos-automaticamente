@@ -4,10 +4,6 @@ import os
 import re
 import datetime
 
-
-
-# Resto do seu código permanece o mesmo...
-
 # Conectando ao Gmail com IMAP
 objCon = imaplib.IMAP4_SSL("imap.gmail.com")
 
@@ -19,18 +15,18 @@ objCon.login(login, senha)
 
 objCon.list()
 objCon.select(mailbox='inbox', readonly=True)
-print("Logado com sucesso!")
+print("Login realizado com sucesso!")
 
-# Defina a data a partir da qual deseja buscar os e-mails (novembro de 2023)
+
+# Filtros
 data_inicio = datetime.datetime(2024, 3, 11).strftime('%d-%b-%Y')
 data_final = datetime.datetime(2024, 3, 18).strftime('%d-%b-%Y')
 
-# Modifique a busca na sua função objCon.search para buscar e-mails a partir da data definida
 respostas, idDosEmails = objCon.search(None, f'SINCE {data_inicio} BEFORE {data_final}')
 
-# Crie uma pasta para salvar os anexos, se não existir
-if not os.path.exists("carol"):
-    os.makedirs("carol")
+# Salvar na pasta
+if not os.path.exists("anexos"):
+    os.makedirs("anexos")
 
 # Loopando cada ID do email na caixa de entrada
 for num in idDosEmails[0].split():
@@ -64,7 +60,7 @@ for num in idDosEmails[0].split():
                     counter += 1
                 unique_fileName = f"carol/{base_name}_{counter}{ext}"
 
-                # Substitua caracteres de quebra de linha e retorno de carro no nome do arquivo
+                # Substituindo caracteres de quebra de linha e retorno de carro no nome do arquivo
                 unique_fileName = unique_fileName.replace('\r', '').replace('\n', '')
 
                 arquivo = open(unique_fileName, 'wb')
